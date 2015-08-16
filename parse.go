@@ -1,3 +1,8 @@
+/*
+ * Copyright 2015 Ming-der Wang <ming@log4analytics.com> All rights reserved.
+ * Licensed under MIT License.
+ */
+
 package parse
 
 import (
@@ -9,26 +14,7 @@ import (
 	"strings"
 )
 
-var src = `
-//go:generate ginger $GOFILE
-package main
-// @gigner
-type SlackMessage struct {
-	Name string 
-}
-type dontParse struct {
-	Name string 
-}
-// @gigner
-type SlackUser struct {
-	Name string 
-}
-func main() {
-	println("hello ginger")
-}
-`
-
-func parseTypeNameFromComment() {
+func parseTypeNameFromComment(src string) {
 	fset := token.NewFileSet()
 	f, err := parser.ParseFile(fset, "", src, parser.ParseComments)
 	if err != nil {
