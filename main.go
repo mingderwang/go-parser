@@ -2,21 +2,25 @@ package main
 
 import (
 	"fmt"
-	"github.com/davecgh/go-spew/spew"
+	//	"github.com/davecgh/go-spew/spew"
 	"go/ast"
 	"go/parser"
 	"go/token"
+	"strings"
 )
-
-type Slack struct {
-	Name string
-}
 
 var src = `
 //go:generate ginger $GOFILE
 package main
 // @gigner
-type Slack struct {
+type SlackMessage struct {
+	Name string 
+}
+type dontParse struct {
+	Name string 
+}
+// @gigner
+type SlackUser struct {
 	Name string 
 }
 func main() {
@@ -30,20 +34,26 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	ast.Print(fset, f)
-	fmt.Println("-----------------")
+	//ast.Print(fset, f)
 	for index, decl := range f.Decls {
 		fmt.Println(index)
-		spew.Dump(decl)
-		genDecl, ok := decl.(*ast.GenDecl)
-		if !ok {
-			fmt.Println("!ok")
-		} else {
+		//spew.Dump(decl)
+		if genDecl, ok := decl.(*ast.GenDecl); ok {
 			if genDecl.Doc == nil {
 				fmt.Println("genDecl.Doc == nil")
 			} else {
-				spew.Dump(genDecl.Doc)
-
+				//spew.Dump(genDecl.Doc)
+				for _, comment := range genDecl.Doc.List {
+					if strings.Contains(comment.Text, "@gigner") {
+						for _, spec := range genDecl.Specs {
+							if typeSpec, ok := spec.(*ast.TypeSpec); ok {
+								if typeSpec.Name != nil {
+									fmt.Println(typeSpec.Name.Name)
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 	}
