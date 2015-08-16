@@ -21,7 +21,10 @@ import ()
 type SlackUser struct {
 	Name string
 }
-
+// don't scan
+type SlackChannel struct {
+	Name string
+}
 // @ginger
 type SlackMessage struct {
 	Name string
