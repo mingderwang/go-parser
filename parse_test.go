@@ -5,25 +5,36 @@
 
 package parse
 
-import (
-	"github.com/mingderwnag/parse"
-)
+import ()
 
-var src = `
+var (
+	src = `
 /*
  * Copyright 2015 Ming-der Wang <ming@log4analytics.com> All rights reserved.
  * Licensed under MIT License.
  */
 
 package parse
-
 import ()
 
+// @ginger
+type SlackUser struct {
+	Name string
+}
+
+// @ginger
+type SlackMessage struct {
+	Name string
+}
+
 func main() {
-	parseTypeNameFromComment(src)
 }
 `
+)
 
 func ExampleParse() {
-	parseTypeNameFromComment(src)
+	Scan(src)
+	//Output:
+	//SlackUser
+	//SlackMessage
 }
